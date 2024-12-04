@@ -63,7 +63,7 @@ def get_prebuilt_retriever_tool(topic: str, store):
         Document store created from the web search results on the query: {topic}.
     """)
 
-def embed_docs(docs, embedding_model, store):
+def embed_docs(docs, embedding_model, store, ids: list = None):
     """
     Returns an embedding tool with the given documents, embedding model and store.
     """

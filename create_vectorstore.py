@@ -10,6 +10,7 @@ import faiss
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.vectorstores import FAISS
 from utils.llms import get_ollama_embedding
+from utils.tools import embed_docs
 from uuid import uuid4
 from dotenv import load_dotenv
 
@@ -144,5 +145,6 @@ if __name__ == "__main__":
 
     uuids = [str(uuid4()) for _ in range(len(documents))]
 
-    vector_store.add_documents(documents=documents, ids=uuids)
+    vector_store = embed_docs(documents, embeddings, vector_store, uuids)
+
     vector_store.save_local("products")
