@@ -54,12 +54,12 @@ def get_retriever_tool(topic: str, docs, embedding_model, store):
     vectorstore = store.from_documents(documents=doc_splits, embedding=embedding_model)
     return get_prebuilt_retriever_tool(topic, vectorstore)
 
-def get_prebuilt_retriever_tool(topic: str, store):
+def get_prebuilt_retriever_tool(info: str, store):
     """
     Returns a retriever tool with the given topic and store.
     """
     return create_retriever_tool(store.as_retriever(), "doc_retriever", f"""
-        Document store created from the web search results on the query: {topic}.
+        {info}.
     """)
 
 def embed_docs(docs, embedding_model, store, ids: list = None):
