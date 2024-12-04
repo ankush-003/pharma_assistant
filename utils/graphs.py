@@ -8,11 +8,11 @@ from .llms import get_ollama
 import uuid
 import os
 from typing import Literal
-
+from pydantic import BaseModel
 from .states import State
 
 ## Prebuilt Graphs
-def get_react_agent(graph: StateGraph, llm, tools):
+def get_react_agent(graph: StateGraph, prompt: str, llm, tools):
     """
     Get the tool agent graph
     """
@@ -28,9 +28,7 @@ def get_react_agent(graph: StateGraph, llm, tools):
 
     def call_model(state: State):
         messages = state["messages"]
-        system_prompt = SystemMessage(
-            "You are a helpful AI assistant, please respond to the users query to the best of your ability!"
-        )
+        system_prompt = SystemMessage(prompt)
         response = llm_with_tools.invoke([system_prompt] + messages)
         return {"messages": [response]}
 
