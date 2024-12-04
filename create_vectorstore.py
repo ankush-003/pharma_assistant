@@ -3,7 +3,7 @@ from langchain_core.documents import Document
 import json
 from pathlib import Path
 from pprint import pprint
-from genson import SchemaBuilder
+# from genson import SchemaBuilder
 from typing import Dict, Any, List
 import os
 import faiss
@@ -13,6 +13,23 @@ from utils.llms import get_ollama_embedding
 from utils.tools import embed_docs
 from uuid import uuid4
 from dotenv import load_dotenv
+
+# Mapping of section headers to normalized keys
+section_mapping = {
+    "DESCRIPTION": "description",
+    "CLINICAL PHARMACOLOGY": "clinical_pharmacology",
+    "INDICATIONS AND USAGE": "indications",
+    "CONTRAINDICATIONS": "contraindications",
+    "WARNINGS": "warnings",
+    "PRECAUTIONS": "precautions",
+    "ADVERSE REACTIONS": "adverse_reactions",
+    "OVERDOSAGE": "overdosage",
+    "DOSAGE AND ADMINISTRATION": "dosage",
+    "HOW SUPPLIED": "how_supplied",
+    "PACKAGE LABEL.PRINCIPAL DISPLAY PANEL": "package_label",
+    "INGREDIENTS AND APPEARANCE": "ingredients",
+    "product_name": "product_name"
+}
 
 def json_to_langchain_documents(json_data: Dict[str, Any], filename: str) -> List[Document]:
     """
@@ -28,37 +45,19 @@ def json_to_langchain_documents(json_data: Dict[str, Any], filename: str) -> Lis
     # Create a list to store documents
     documents = []
     
-    # Key mapping to make document metadata more readable
-    key_mapping = {
-        "DESCRIPTION:": "description",
-        "CLINICAL PHARMACOLOGY:": "clinical_pharmacology",
-        "INDICATIONS AND USAGE:": "indications",
-        "CONTRAINDICATIONS:": "contraindications",
-        "WARNINGS:": "warnings",
-        "PRECAUTIONS:": "precautions",
-        "ADVERSE REACTIONS:": "adverse_reactions",
-        "OVERDOSAGE:": "overdosage",
-        "DOSAGE AND ADMINISTRATION:": "dosage",
-        "HOW SUPPLIED:": "how_supplied",
-        "PACKAGE LABEL.PRINCIPAL DISPLAY PANEL": "package_label",
-        "INGREDIENTS AND APPEARANCE": "ingredients",
-        "product_name": "product_name"
-    }
-    
     # Combine all text sections into a single page content
     page_content = "\n\n".join([
-        f"{key}: {value}" 
-        for key, value in json_data.items() 
-        if value  # Only include non-empty values
+        json_data.get(section_key, '')
+        for section_key in section_mapping.values()
     ])
     
     # Create metadata dictionary
     metadata = {
         "source": filename,
         **{
-            key_mapping.get(k, k): v 
+            section_mapping.get(k, k): v 
             for k, v in json_data.items() 
-            if k in key_mapping
+            if k in section_mapping
         }
     }
     
@@ -126,8 +125,8 @@ if __name__ == "__main__":
         print(f"\nDocument {i}:")
         print("Metadata:")
         print(doc.metadata)
-        print("\nContent (first 500 characters):")
-        print(doc.page_content[:500] + "...")
+        print("\nContent (first 10 characters):")
+        print(doc.page_content[:10] + "...")
         print("-" * 50)
 
     print(f"Total Documents Processed: {len(documents)}")

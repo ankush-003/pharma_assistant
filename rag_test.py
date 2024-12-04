@@ -36,5 +36,10 @@ app = get_react_agent(workflow, "You are a helpful AI assistant, please respond 
 
 config = {"configurable": {"thread_id": "1", "user_id": "1"}}
 
-print(app.invoke({"messages": [("human", "Can you please give me the name of the capsules that are an inhibitor of the enzyme carbonic anhydrase, give me only the name")]}, config=config))
-print_messages_state(app.get_state(config=config))
+# print(app.invoke({"messages": [("human", "Can you please give me the name of the capsules that are an inhibitor of the enzyme carbonic anhydrase, give me only the name")]}, config=config))
+# print_messages_state(app.get_state(config=config))
+
+
+# orally once daily with or without food 
+print(app.invoke({"messages": [("human", "Can you provide dosage details of atorvastatin calcium tablets")]}, config=config))
+

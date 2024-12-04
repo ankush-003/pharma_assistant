@@ -47,12 +47,11 @@ def get_retriever_tool(topic: str, docs, embedding_model, store):
     Returns a retriever tool with the given topic, documents, embedding model and store.
     """
     text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-        chunk_size=100, chunk_overlap=50
+        chunk_size=200, chunk_overlap=10
     )
     # docs_list = [item for sublist in docs for item in sublist]
     doc_splits = text_splitter.split_documents(docs)
     vectorstore = store.from_documents(documents=doc_splits, embedding=embedding_model)
-    
     return get_prebuilt_retriever_tool(topic, vectorstore)
 
 def get_prebuilt_retriever_tool(topic: str, store):
@@ -68,7 +67,7 @@ def embed_docs(docs, embedding_model, store, ids: list = None):
     Returns an embedding tool with the given documents, embedding model and store.
     """
     text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-        chunk_size=100, chunk_overlap=50
+        chunk_size=200, chunk_overlap=10
     )
     doc_splits = text_splitter.split_documents(docs)
     vectorstore = store.from_documents(documents=doc_splits, embedding=embedding_model)

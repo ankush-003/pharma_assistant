@@ -5,3 +5,5 @@ langchain-chroma
 jq
 langchain-community 
 faiss-cpu
+langchain_ollama
+langchain_openai
