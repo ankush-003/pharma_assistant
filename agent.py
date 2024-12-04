@@ -112,6 +112,7 @@ for key, node in tool_nodes.items():
 
 agent = workflow.compile(checkpointer=MemorySaver())
 
+# print(agent.get_graph().draw_mermaid())
 
 # print_messages_state(agent.get_state(config=config))
 msg = str(input("Enter your message: "))
