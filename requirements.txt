@@ -1,0 +1,7 @@
+langchain
+langgraph
+langchain_groq
+langchain-chroma
+jq
+langchain-community 
+faiss-cpu
